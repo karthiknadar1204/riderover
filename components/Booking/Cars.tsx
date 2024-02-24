@@ -6,7 +6,14 @@ import Image from 'next/image'
 import React, { useContext, useState } from 'react'
 
 function Cars() {
-    const [selectedCar,setSelectedCar]=useState<any>()
+    const [selectedCar,setSelectedCar]=useState<any>();
+    const {directionData, setDirectionData} 
+    = useContext(DirectionDataContext);
+
+    const getCost=(charges:any)=>{
+      return (charges*directionData.routes[0].distance*0.000621371192)
+      .toFixed(2)
+    }
 
   return (
     <div className='mt-3'>
@@ -32,7 +39,11 @@ function Cars() {
                     className='w-full'
                     />
                     <h2 className='text-[10px] text-gray-500'>{item.name}
-                     </h2>
+                   {directionData.routes?
+                    <span className='float-right font-medium
+                     text-black'>
+                      {getCost(item.charges)} 
+                     $</span>:null}</h2>
                 </div>
             ))}
         </div>

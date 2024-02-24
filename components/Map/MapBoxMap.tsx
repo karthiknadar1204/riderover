@@ -1,34 +1,40 @@
-"use client"
+import { UserLocationContext } from "@/context/UserLocationContext";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Map, Marker } from "react-map-gl";
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { UserLocationContext } from "@/context/UserLocationContext";
+import "mapbox-gl/dist/mapbox-gl.css";
 import Markers from "./Markers";
 import { SourceCordiContext } from "@/context/SourceCordiContext";
 import { DestinationCordiContext } from "@/context/DestinationCordiContext";
-// import pin from '../../public/pin.png'
+import MapBoxRoute from "./MapBoxRoute";
+import { DirectionDataContext } from "@/context/DirectionDataContext";
+import DistanceTime from "../Booking/DistanceTime";
+const MAPBOX_DRIVING_ENDPOINT =
+  "https://api.mapbox.com/directions/v5/mapbox/driving/";
+  const session_token='08cffe0d-4c8d-43f1-88dd-9a502ce0b409'
 
 
-const MapBoxMap = () => {
-
+function MapboxMap() {
   const mapRef = useRef<any>();
   const { userLocation, setUserLocation } = useContext(UserLocationContext);
-  const { sourceCordinates, setSourceCordinates } =
-  useContext(SourceCordiContext);
-const { destinationCordinates, setDestinationCordinates } = useContext(
-  DestinationCordiContext
-);
+  const { soruceCordinates, setSourceCordinates } =
+    useContext(SourceCordiContext);
+  const { destinationCordinates, setDestinationCordinates } = useContext(
+    DestinationCordiContext
+  );
+
+  const {directionData, setDirectionData} = useContext(DirectionDataContext);
+
+  //Use to Fly to Source Marker Location
 
   useEffect(() => {
-    if (sourceCordinates) {
+    if (soruceCordinates) {
       mapRef.current?.flyTo({
         center: [soruceCordinates.lng, soruceCordinates.lat],
         duration: 2500,
       });
     }
-  }, [sourceCordinates]);
-
-
+  }, [soruceCordinates]);
+  //Use to Fly to Destination Markers Location
   useEffect(() => {
     if (destinationCordinates) {
       mapRef.current?.flyTo({
@@ -37,16 +43,42 @@ const { destinationCordinates, setDestinationCordinates } = useContext(
       });
     }
 
-    if (sourceCordinates && destinationCordinates) {
+    if (soruceCordinates && destinationCordinates) {
       getDirectionRoute();
     }
   }, [destinationCordinates]);
 
+  //Newly Added
+  const getDirectionRoute = async () => {
+    const res = await fetch(
+      MAPBOX_DRIVING_ENDPOINT +
+        soruceCordinates.lng +
+        "," +
+        soruceCordinates.lat +
+        ";" +
+        destinationCordinates.lng +
+        "," +
+        destinationCordinates.lat +
+        "?overview=full&geometries=geojson" +
+        "&access_token=" +
+        process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const result = await res.json();
+    console.log(result);
+    console.log(result.routes);
+    setDirectionData(result);
+  };
 
   return (
     <div className="p-5">
-        <h2 className="text-[20px] font-semibold">Map</h2>
-        <div className="rounded-lg overflow-hidden">
+      <h2 className="text-[20px] font-semibold">Map</h2>
+      <div className="rounded-lg overflow-hidden">
         {userLocation ? (
           <Map
             ref={mapRef}
@@ -59,16 +91,22 @@ const { destinationCordinates, setDestinationCordinates } = useContext(
             style={{ width: "100%", height: 450, borderRadius: 10 }}
             mapStyle="mapbox://styles/mapbox/streets-v9"
           >
-          {/* <Marker longitude={userLocation?.lng} latitude={userLocation?.lat} anchor="bottom" className='w-10 h-10'>
-            <img src="./pin.png"/>
-          </Marker> */}
-          <Markers/>
+            <Markers />
 
+            {directionData?.routes ? (
+              <MapBoxRoute
+                coordinates={directionData?.routes[0]?.geometry?.coordinates}
+              />
+            ) : null}
           </Map>
         ) : null}
-        </div>
+      </div>
+      <div className="absolute bottom-[40px]
+      z-20 right-[20px]">
+     <DistanceTime />
+     </div>
     </div>
-  )
+  );
 }
 
-export default MapBoxMap
+export default MapboxMap;
