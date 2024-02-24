@@ -1,4 +1,5 @@
 import Booking from '@/components/Booking/Booking'
+import MapBoxMap from '@/components/Map/MapBoxMap'
 import { UserButton } from '@clerk/nextjs'
 import React from 'react'
 
@@ -11,9 +12,8 @@ const Home = () => {
 
         </div>
 
-        <div className='col-span-2 bg-red-100 '>
-          Map
-
+        <div className='col-span-2'>
+          <MapBoxMap/>
         </div>
 
       </div>
