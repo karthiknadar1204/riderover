@@ -1,6 +1,11 @@
 "use client"
 
 import React, { useContext, useEffect,useState } from 'react'
+import { SourceCordiContext } from '@/context/SourceCordiContext'
+import { DestinationCordiContext } from '@/context/DestinationCordiContext'
+const session_token='08cffe0d-4c8d-43f1-88dd-9a502ce0b409'
+const MAPBOX_RETRIVE_URL='https://api.mapbox.com/search/searchbox/v1/retrieve/'
+
 
 const AutocompleteAddress = () => {
 
@@ -10,13 +15,19 @@ const AutocompleteAddress = () => {
   const [addressList,setAddressList]=useState<any>([]);
   const [destination,setDestination]=useState<any>();
 
+  // const [sourceCordinates,setSourceCordinates]=useState([]);
+  // const [destinationCordinates,setDestinationCordinates]=useState([]);
 
-  useEffect(()=>{
-    const delayDebounceFn=  setTimeout(()=>{
-        getAddressList()
-    },1000)
-    return () => clearTimeout(delayDebounceFn)   
-},[source,destination]);
+  const {sourceCordinates,setSourceCordinates}=useContext(SourceCordiContext);
+  const {destinationCordinates,setDestinationCordinates}
+  =useContext(DestinationCordiContext);
+
+    useEffect(()=>{
+        const delayDebounceFn=  setTimeout(()=>{
+            getAddressList()
+        },1000)
+        return () => clearTimeout(delayDebounceFn)   
+    },[source,destination]); 
 
 const getAddressList=async()=>{
   setAddressList([]);
@@ -35,34 +46,34 @@ const getAddressList=async()=>{
 const onSourceAddressClick=async(item:any)=>{
   setSource(item.place_formatted);
   setAddressList([]);setSourceChange(false)
-  // const res=await fetch(MAPBOX_RETRIVE_URL+item.mapbox_id
-  //     +"?session_token="+session_token
-  //     +"&access_token="+process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN)
+  const res=await fetch(MAPBOX_RETRIVE_URL+item.mapbox_id
+      +"?session_token="+session_token
+      +"&access_token="+process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN)
   
-  // const result=await res.json();
-  
-  // setSourceCordinates({
-  //     lng:result.features[0].geometry.coordinates[0],
-  //     lat:result.features[0].geometry.coordinates[1], 
-  // })
-  // console.log(result);
+  const result=await res.json();
+  console.log(result);
+  setSourceCordinates({
+    lng:result.features[0].geometry.coordinates[0],
+    lat:result.features[0].geometry.coordinates[1], 
+})
+console.log(result);
 }
 
 const onDestinationAddressClick=async(item:any)=>{
   setDestination(item.place_formatted);
   setAddressList([]);
   setDestinationChange(false)
-  // const res=await fetch(MAPBOX_RETRIVE_URL+item.mapbox_id
-  //     +"?session_token="+session_token
-  //     +"&access_token="+process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN)
+  const res=await fetch(MAPBOX_RETRIVE_URL+item.mapbox_id
+      +"?session_token="+session_token
+      +"&access_token="+process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN)
   
-  // const result=await res.json();
+  const result=await res.json();
   
-  // setDestinationCordinates({
-  //     lng:result.features[0].geometry.coordinates[0],
-  //     lat:result.features[0].geometry.coordinates[1], 
-  // })
-  // console.log(result);
+  setDestinationCordinates({
+      lng:result.features[0].geometry.coordinates[0],
+      lat:result.features[0].geometry.coordinates[1], 
+  })
+  console.log(result);
 }
 
 
