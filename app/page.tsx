@@ -11,8 +11,13 @@ import { DestinationCordiContext } from "@/context/DestinationCordiContext";
 import { DirectionDataContext } from "@/context/DirectionDataContext";
 import { SelectedCarAmountContext } from "@/context/SelectedCarAmountContext";
 
+interface UserLocation {
+  lat: number;
+  lng: number;
+}
+
 const Home = () => {
-  const [userLocation, setUserLocation] = useState();
+  const [userLocation, setUserLocation] = useState<UserLocation | undefined>();
   const [soruceCordinates, setSourceCordinates] = useState<any>([]);
   const [destinationCordinates, setDestinationCordinates] = useState<any>([]);
   const [directionData, setDirectionData] = useState<any>([]);

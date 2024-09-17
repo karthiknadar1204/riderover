@@ -8,12 +8,14 @@ import Map, {
   Popup,
   Source,
 } from "react-map-gl";
+
 function MapBoxRoute(props: any) {
   return (
     <Source
       type="geojson"
       data={{
         type: "Feature",
+        properties: {},
         geometry: { type: "LineString", coordinates: props.coordinates },
       }}
     >
