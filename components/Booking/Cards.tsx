@@ -5,32 +5,40 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 
 function Cards() {
-    const [activeIndex,setActiveIndex]=useState<any>();
-  return (
-    <div>
-        <h2 className='text-[14px] font-medium'>Payment Methods</h2>
-        <div className='grid grid-cols-5 md:grid-cols-4  lg:grid-cols-5 mt-2 pl-2'>
-            {CardsList.map((item,index)=>(
-                <div key={index} className={`w-[50px] mb-1 border-[1px]
-                flex items-center
-                 justify-center 
-                 rounded-md
-                 cursor-pointer
-                 hover:border-yellow-400
-                 hover:scale-110 transition-all
-                 ${activeIndex==index
-                    ?'border-yellow-400 border-[2px]':null}`}
-                 onClick={()=>setActiveIndex(index)}>
-                    <Image src={item.image}
-                    alt={item.name}
-                    width={30}
-                    height={50}
-                    />
-                </div>
-            ))}
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+    return (
+        <div className="bg-white rounded-lg shadow-md p-6 mt-6">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">Payment Methods</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {CardsList.map((item, index) => (
+                    <div
+                        key={index}
+                        className={`
+                            flex flex-col items-center justify-center p-4 rounded-lg cursor-pointer
+                            transition-all duration-300 ease-in-out
+                            ${activeIndex === index
+                                ? "bg-blue-50 border-2 border-blue-400"
+                                : "bg-gray-50 hover:bg-gray-100"
+                            }
+                        `}
+                        onClick={() => setActiveIndex(index)}
+                    >
+                        <div className="relative w-12 h-12 mb-2">
+                            <Image
+                                src={item.image}
+                                alt={item.name}
+                                layout="fill"
+                                objectFit="contain"
+                                className="rounded-md"
+                            />
+                        </div>
+                        <span className="text-sm font-medium text-gray-700">{item.name}</span>
+                    </div>
+                ))}
+            </div>
         </div>
-    </div>
-  )
+    )
 }
 
 export default Cards

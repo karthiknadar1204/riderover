@@ -3,24 +3,23 @@ import Image from 'next/image'
 import React from 'react'
 import { UserButton } from "@clerk/nextjs";
 import { useUser } from "@clerk/clerk-react";
+
 function NavBar() {
   const { isSignedIn, user, isLoaded } = useUser();
-  return isSignedIn&&(
-    <div className='flex justify-between
-     p-3 px-10 border-b-[1px] shadow-sm'>
-        <div className='flex gap-10 items-center'>
-            <h2>RideRover</h2>
-            <div className='hidden md:flex gap-6'>
-                <h2 className='hover:bg-gray-100 p-2
-                rounded-md cursor-pointer transition-all'>Home</h2>
-                <h2 className='hover:bg-gray-100 p-2
-                rounded-md cursor-pointer transition-all'>History</h2>
-                <h2 className='hover:bg-gray-100 p-2
-                rounded-md cursor-pointer transition-all'>Help</h2>
-            </div>
-        </div>
-        <UserButton afterSignOutUrl="/"/>
-    </div>
+  return isSignedIn && (
+    <nav className='flex justify-between items-center py-4 px-8 bg-white border-b border-gray-200 shadow-md'>
+      <div className='flex items-center'>
+        <h1 className='text-2xl font-bold text-blue-600 tracking-wide'>RideRover</h1>
+      </div>
+      <UserButton 
+        afterSignOutUrl="/"
+        appearance={{
+          elements: {
+            avatarBox: 'h-10 w-10'
+          }
+        }}
+      />
+    </nav>
   )
 }
 
