@@ -2,27 +2,27 @@ export default[
     {
         id:1,
         name:'Master Card',
-        // image:'/card.png'
+        image:'/card.jpeg'
     },
     {
         id:1,
         name:'Visa Card',
-        // image:'/visa.png'
+        image:'/visa.jpeg'
     },
-    {
+    { 
         id:1,
         name:'Apple Pay',
-        // image:'/apple-pay.png'
+        image:'/apple-pay.jpeg'
     },
     {
         id:1,
         name:'Google Pay',
-        // image:'/google-pay.png'
+        image:'/google-pay.jpeg'
     },
     {
         id:1,
         name:'Cash',
-        // image:'/cash.png'
+        image:'/cash.jpeg'
     },
 
 ]

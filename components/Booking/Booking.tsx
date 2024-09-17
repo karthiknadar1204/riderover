@@ -24,7 +24,7 @@ const Booking = () => {
             <button
             className={`w-full bg-yellow-400 p-1 rounded-md mt-4 ${!carAmount && 'bg-gray-200'}`}
             disabled={!carAmount}
-            onClick={()=>router.push('/payment')}
+            // onClick={()=>router.push('/payment')}
             >
               Book
             </button>
